@@ -1,3 +1,13 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-module.exports = mongoose.connect("mongodb+srv://MiniChat:Azerty12345@minichat.7nhw5wm.mongodb.net/MiniChat");
+mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(()=> {
+    console.log("DB Connection Successfull");
+}).catch((err) => {
+    console.log(err.message);
+});
+
+module.exports = 
