@@ -26,6 +26,7 @@ server.listen(3000, () => {
 
 
 io.on("connection", (socket) => {
+    
     UserController.createUser({socket_id: socket.id, name: "Hugo"});
 
 

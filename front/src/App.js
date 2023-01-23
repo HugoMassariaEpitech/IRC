@@ -1,12 +1,9 @@
-import "./App.css";
-import ChatStart from "./components/ChatStart";
-import ChatEnd from "./components/ChatEnd";
+import Home from "./Pages/Home";
 
 function App() {
   return (
     <>
-      <ChatStart />
-      <ChatEnd />
+      <Home />
     </>
   );
 }
