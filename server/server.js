@@ -9,15 +9,26 @@ const io = new Server(server, {
     }
 });
 
+const mongoose = require("mongoose");
+require("dotenv").config();
+
+mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(()=> {
+    console.log("DB Connection Successfull");
+}).catch((err) => {
+    console.log(err.message);
+});
+
 const UserController = require("./controllers/User");
-const Database = require("./config/Database");
 
 app.get("/", (req, res) => {
     
 });
 
-server.listen(5000, () => {
-    console.log("Listen to port 5000");
+server.listen(process.env.PORT, () => {
+    console.log(`Listen to port ${process.env.PORT}`);
 });
 
 
@@ -33,14 +44,10 @@ io.on("connection", (socket) => {
 
 
 
-    // const users = [];
-    // for (let [id, socket] of io.of("/").sockets) {
-    //     users.push({
-    //     userID: id,
-    //     username: socket.username,
-    //     });
-    // }
-    // io.emit("New User", users);
+
+io.on("connection", (socket) => {
+    io.emit("New User", {"Welcome" : socket.id});
+    console.log("yes");
     // UserController.createUser({socket_id: socket.id, name: "Hugo"});
 
 
