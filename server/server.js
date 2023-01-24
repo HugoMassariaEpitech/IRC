@@ -21,16 +21,26 @@ server.listen(5000, () => {
 });
 
 
-
-
-
-
-
+const clients = io.engine.clientsCount;
 
 
 
 io.on("connection", (socket) => {
-    io.emit("New User", "Welcome !");
+    console.log(clients);
+    // Users.push({id: socket.id, connected: true});
+    // console.log(Users);
+
+
+
+
+    // const users = [];
+    // for (let [id, socket] of io.of("/").sockets) {
+    //     users.push({
+    //     userID: id,
+    //     username: socket.username,
+    //     });
+    // }
+    // io.emit("New User", users);
     // UserController.createUser({socket_id: socket.id, name: "Hugo"});
 
 
@@ -44,4 +54,8 @@ io.on("connection", (socket) => {
     //     socket.join(id);
     //     io.in("MiniRoom").emit('chat message', "Hugo joined room");
     // });
+
+    socket.on("New", (id) => {
+        console.log(id);
+    });
 });

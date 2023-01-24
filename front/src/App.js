@@ -3,17 +3,14 @@ import Home from "./Pages/Home";
 import socketIOClient from "socket.io-client";
 
 function App() {
-  const RefreshPage = useState(null);
+  const [state,setState]=useState("");
   useEffect(() => {
     const socket = socketIOClient("http://localhost:5000");
-    socket.on("New User", (message) => {
-      console.log(message);
-      RefreshPage({fromSelf: false, messages: "msg"});
-    });
+    
   }, []);
   return (
     <>
-      <Home name={Math.random()} />
+      <Home name={state} />
     </>
   );
 }
