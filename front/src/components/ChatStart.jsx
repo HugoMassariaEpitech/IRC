@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ChatStart() {
+export default function ChatStart(props) {
     return (
         <div className="chat chat-start">
             <div className="chat-image avatar">
@@ -9,7 +9,7 @@ export default function ChatStart() {
                 </div>
             </div>
             <div className="chat-header">Obi-Wan Kenobi<time className="text-xs opacity-50">12:45</time></div>
-            <div className="chat-bubble">You were the Chosen One!</div>
+            <div className="chat-bubble">{props.message}</div>
             <div className="chat-footer opacity-50">Delivered</div>
         </div>
     );
