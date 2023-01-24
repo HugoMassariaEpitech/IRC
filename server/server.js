@@ -22,6 +22,9 @@ server.listen(5000, () => {
 io.on("connection", (socket) => {
     io.emit("New User", Array.from(socket.nsp.sockets.keys()).reduce((json, value) => { json[value] = []; return json; }, {})); // New User Notification
 
+    socket.on("Message", (message) => {
+        io.emit("Message Received", message);
+    });
 
 
 
