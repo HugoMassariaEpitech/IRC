@@ -9,45 +9,37 @@ const io = new Server(server, {
     }
 });
 
-const mongoose = require("mongoose");
-require("dotenv").config();
-
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(()=> {
-    console.log("DB Connection Successfull");
-}).catch((err) => {
-    console.log(err.message);
-});
-
 const UserController = require("./controllers/User");
 
 app.get("/", (req, res) => {
     
 });
 
-server.listen(process.env.PORT, () => {
-    console.log(`Listen to port ${process.env.PORT}`);
+server.listen(5000, () => {
+    console.log("Listen to port 5000");
 });
 
-
-const clients = io.engine.clientsCount;
-
-
-
 io.on("connection", (socket) => {
-    console.log(clients);
-    // Users.push({id: socket.id, connected: true});
-    // console.log(Users);
+    io.emit("New User", Array.from(socket.nsp.sockets.keys()).reduce((json, value) => { json[value] = []; return json; }, {})); // New User Notification
 
 
 
 
 
-io.on("connection", (socket) => {
-    io.emit("New User", {"Welcome" : socket.id});
-    console.log("yes");
+
+
+    // socket.on("Get All Users", () => {
+    //     socket.emit("All Users", Array.from(socket.nsp.sockets.keys()));
+    // });
+
+
+    
+
+
+
+
+
+
     // UserController.createUser({socket_id: socket.id, name: "Hugo"});
 
 
@@ -61,8 +53,28 @@ io.on("connection", (socket) => {
     //     socket.join(id);
     //     io.in("MiniRoom").emit('chat message', "Hugo joined room");
     // });
+});
 
-    socket.on("New", (id) => {
-        console.log(id);
-    });
+
+
+
+
+
+
+
+
+
+
+
+
+const mongoose = require("mongoose");
+require("dotenv").config();
+
+mongoose.connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(()=> {
+    console.log("DB Connection Successfull");
+}).catch((err) => {
+    console.log(err.message);
 });

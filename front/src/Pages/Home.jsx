@@ -2,20 +2,17 @@ import React, { useState, useEffect }  from "react";
 import "../index.css";
 import Logo from "../Assets/Logo.png"
 import socketIOClient from "socket.io-client";
+import PrivateChannel from "../Components/PrivateChannel";
 
-<<<<<<< HEAD
-export default function Home({name}) {
-=======
-export default function Home(props) {
-    const RefreshPage = useState(null);
+export default function Home() {
+    const [allUsers, setUsers] = useState([]);
     useEffect(() => {
       const socket = socketIOClient("http://localhost:5000");
-      socket.on("New User", (message) => {
-        console.log(message.Welcome);
-        // RefreshPage({fromSelf: false, messages: "msg"});
+      socket.on("New User", (Users) => {
+        delete Users[socket.id];
+        setUsers(Users);
       });
     }, []);
->>>>>>> bf0f2fcb395f678970a923f08c359cd6345c2032
     return (
         <body className="absolute h-full w-full flex">
             <aside className="h-full w-1/5 border-r border-[#1e2124] bg-[#282b30]">
@@ -25,12 +22,18 @@ export default function Home(props) {
                     </a>
                     <ul className="space-y-2">
                         {
-                            
+                            Object.values(allUsers).map((values, ID) => {
+                                return (
+                                    <PrivateChannel name="Hugo Massaria" lastMessage="Salut !"/>
+                                )
+                            })
                         }
                     </ul>
                 </div>
             </aside>
-            <div className="h-full flex-1 bg-[#36393e] flex flex-col">{name}</div>
+            <div className="h-full flex-1 bg-[#36393e] flex flex-col">
+                
+            </div>
         </body>
     );
 }
