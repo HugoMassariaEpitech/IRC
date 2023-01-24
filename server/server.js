@@ -41,7 +41,8 @@ server.listen(process.env.PORT, () => {
 
 
 io.on("connection", (socket) => {
-    io.emit("New User", "Welcome !");
+    io.emit("New User", {"Welcome" : socket.id});
+    console.log("yes");
     // UserController.createUser({socket_id: socket.id, name: "Hugo"});
 
 

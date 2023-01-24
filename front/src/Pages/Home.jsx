@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState, useEffect }  from "react";
 import "../index.css";
 import Logo from "../Assets/Logo.png"
+import socketIOClient from "socket.io-client";
 
 export default function Home(props) {
+    const RefreshPage = useState(null);
+    useEffect(() => {
+      const socket = socketIOClient("http://localhost:5000");
+      socket.on("New User", (message) => {
+        console.log(message.Welcome);
+        // RefreshPage({fromSelf: false, messages: "msg"});
+      });
+    }, []);
     return (
         <body className="absolute h-full w-full flex">
             <aside className="h-full w-1/5 border-r border-[#1e2124] bg-[#282b30]">
