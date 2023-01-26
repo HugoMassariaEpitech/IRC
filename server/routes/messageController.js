@@ -1,24 +1,21 @@
 const { auth, validate } = require("../middleware");
-const verifyToken = auth.verifyToken;
 const isAdmin = auth.isAdmin;
 const validateCreateAdvertisement = validate.validateCreateAdvertisement;
 const validateUpdateAdvertisement = validate.validateUpdateAdvertisement;
 const validateDeleteAdvertisement = validate.validateDeleteAdvertisement;
-const advertisementsController = require("../controllers/advertisements.controller.js");
+const messageController = require("../controllers/messageController.js");
 
 var router = require("express").Router();
 
 
+// Save a new message in the database
+router.post("/newMessage/", [ HaveANickName ], messageController.create);
 
+// Retrieve all messages
+router.get("/", messageController.findAll);
 
-// Create a new Advertisements
-router.post("/admin/", [ verifyToken, isAdmin, validateCreateAdvertisement ], advertisementsController.create);
-
-// Retrieve all Advertisements
-router.get("/", advertisementsController.findAll);
-
-// Retrieve one Advertisement by ID
-router.get("/:id", advertisementsController.findOne);
+// Retrieve the 20 last messages
+router.get("/paginated", messageController.findPaginated);
 
 // Update a Advertisements with id
 router.put("/admin/:id", [ verifyToken, isAdmin, validateUpdateAdvertisement ], advertisementsController.update);
