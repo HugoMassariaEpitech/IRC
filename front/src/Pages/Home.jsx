@@ -52,7 +52,7 @@ export default function Home() {
                 <div className="h-16">
 
                 </div>
-                <div className="flex-auto p-3 flex flex-col-reverse overflow-hidden">
+                <div className="flex-auto p-3 flex flex-col overflow-auto">
                     {
                         Object.values(allMessages).map((values, ID) => {
                             return (

@@ -2,7 +2,7 @@ import React from "react";
 
 export default function PrivateChannel(props) {
     return (
-        <li>
+        <li id="">
             <a className="flex p-2 rounded-lg hover:bg-[#1e2124] cursor-pointer" key="Hugo" onClick={props.ChangeUser}>
                 <div className="relative">
                     <img className="w-10 h-10 rounded-full bg-[#282b30]" src={`https://placeimg.com/${Math.floor(Math.random()*200)}/${Math.floor(Math.random()*200)}/people`}></img>
