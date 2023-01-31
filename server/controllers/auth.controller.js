@@ -75,7 +75,7 @@ exports.signin = async (req, res, next) => {
             //   httpOnly: true,
             //   secure: process.env.NODE_ENV === "production"
             // })
-            .json({ nickname: user.nickname, uid: user.uid, avatar: user.avatar });
+            .json({ nickname: user.nickname, uid: user.uid, avatar: user.avatar, conversations: user.conversations });
   } catch (error) {
     return res
             .status(500)

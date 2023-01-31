@@ -34,7 +34,15 @@ const UserSchema = new mongoose.Schema({
     // C'est dans le controller que je gère ça
     avatar: String, // Lien vers l'image de l'avatar
     // La convertion est une ref vers le model Conversation
-    conversation: [{type: mongoose.Schema.Types.ObjectId, ref: "ConversationModel"}],
+    conversations: [{
+        conversationId: {
+          type: String,
+          required: [true, "Please provide a conversation id"]
+        },
+        lastMessage: {
+          type: String
+        },
+    }],
     
 }, {versionKey: false});
 

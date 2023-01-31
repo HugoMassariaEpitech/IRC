@@ -1,9 +1,12 @@
 const { generateNameSalt, createUID, getRandomAvatar } = require("./auth.middleware");
-const { addConversationToUser } = require("./conversation.middleware");
+const { createPrivateConversation, createGroupConversation } = require("./conversation.middleware");
+const { updateLastMessage } = require("./message.middleware");
 
 module.exports = {
   generateNameSalt,
   createUID, 
   getRandomAvatar,
-  addConversationToUser
+  createPrivateConversation,
+  createGroupConversation,
+  updateLastMessage
 }

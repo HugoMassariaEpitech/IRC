@@ -1,29 +1,3 @@
-const UserModel = require("../models/user.model");
-
-const addConversationToUser = async (req, res, next) => {
-  const { conversationId, userId } = req.body;
-
-  try {
-  } catch (error) {
-    res.status(500).send(`Erreur: ${error}`);
-  }
-};
-
-const getUser = (userId) => {
-  const { userId } = req.body;
-
-  try {
-    UserModel.findOne({ _id: userId }).exec().then((result) => {
-      return result;
-    });
-  } catch (error) {
-    // Faire une erreur plus verbeuse
-    res.status(500).send(`Erreur: ${error}`);
-    next();
-  }
-};
-
-
 const conversationModel = require("../models/conversation.model.js");
 
 createPrivateConversation = (req, res, next) => {
@@ -67,5 +41,5 @@ createGroupConversation = (req, res, next) => {
 
 module.exports = {
   createPrivateConversation,
-  createGroupConversation,
+  createGroupConversation
 };
