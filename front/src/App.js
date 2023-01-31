@@ -11,7 +11,7 @@ function App() {
     event.preventDefault();
     axios.post("http://localhost:5000/api/auth/signin", {uid: "Massaria#1", password: "Sniperking59!"}).then((result) => {
       if (result.status == 200) {
-        socket.emit("New Connexion", "Hugo Massaria");
+        socket.emit("Users", {[socket.id] : {nickName: "Hugo Massaria", avatarURL: "https://randomuser.me/api/portraits/men/8.jpg"}});
         setConnected(true);
       }
     });

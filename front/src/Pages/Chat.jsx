@@ -6,10 +6,11 @@ import MessageOut from "../Components/MessageOut";
 import {socket} from "../Service/Socket";
 
 export default function Chat() {
-    const [allConnexions, setConnexions] = useState([]);
+    const [allConnexions, setConnexions] = useState({});
     useEffect(() => {
-        socket.on("New Connexion", (Users) => {
-            console.log(Users);
+        socket.on("Users", (data) => {
+            delete data[socket.id];
+            setConnexions(data);
         });
     }, []);
     return (
@@ -25,9 +26,9 @@ export default function Chat() {
             <div className="h-full w-1/4 bg-white flex flex-col border-r p-4">
                 <div className="text-2xl font-semibold flex">Users</div>
                 {
-                    Object.keys(allConnexions).map((value, ID) => {
+                    Object.entries(allConnexions).map((value) => {
                         return (
-                            <SingleChat avatarURL="https://randomuser.me/api/portraits/men/8.jpg" nickName="Hugo Massaria" lastMessage="Dernier message ..."/>
+                            <SingleChat avatarURL={value[1].avatarURL} nickName={value[1].nickName} lastMessage="Dernier message ..."/>
                         )
                     })
                 }

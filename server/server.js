@@ -15,37 +15,17 @@ server.listen(5000, () => {
   console.log("Listen to port 5000");
 });
 
+var UserConnected = {};
+
 io.on("connection", (socket) => {
-  socket.on("New Connexion", (message) => {
-    socket.data.isConnected = true;
-    io.emit("New Connexion", socket);
-    // io.emit("New Connexion", Array.from(socket.nsp.sockets.keys()).reduce((json, value) => { json[value] = []; return json; }, {})); // New User Notification
+  socket.on("Users", (data) => {
+    UserConnected = { ...UserConnected, ...data };
+    io.emit("Users", UserConnected);
   });
-
-  // socket.on("Message", (message) => {
-  //     io.emit("Message Received", message);
-  // });
-
-  // socket.on("New Connexion", (message) => {
-  //   console.log(message);
-  // });
-
-  // socket.on("Get All Users", () => {
-  //     socket.emit("All Users", Array.from(socket.nsp.sockets.keys()));
-  // });
-  // UserController.createUser({socket_id: socket.id, name: "Hugo"});
-
-
-  // socket.on('chat message', (id) => {
-  //     io.to(id).emit('chat message', "hello toi"); // Private Message
-  // });
-  // socket.on('JoinRoom', (id) => {
-
-
-
-  //     socket.join(id);
-  //     io.in("MiniRoom").emit('chat message', "Hugo joined room");
-  // });
+  socket.on("disconnect", function() {
+    delete UserConnected[socket.id];
+    io.emit("Users", UserConnected);
+  });
 });
 
 // Mangoose & Routers
