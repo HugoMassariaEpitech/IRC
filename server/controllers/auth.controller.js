@@ -13,7 +13,8 @@ exports.register = async (req, res, next) => {
   // };
 
   // Utilisation de destructuring pour récupérer les champs du user
-  const newUser = { nickname, name, nameSalt, uid, password } = req.body;
+  const newUser = { nickname, nameSalt, uid, avatar } = req.body;
+  newUser.password = bcrypt.hashSync(req.body.password, 8);
 
   UserModel.create(newUser)
     .then(data => {
@@ -31,6 +32,7 @@ exports.register = async (req, res, next) => {
     });
 };
 
+// Renvoyer nickname et avatar
 exports.signin = async (req, res, next) => {
 
   try {
@@ -73,7 +75,7 @@ exports.signin = async (req, res, next) => {
             //   httpOnly: true,
             //   secure: process.env.NODE_ENV === "production"
             // })
-            .json({ message: `You've been signed in! ${user.nickname}`, isConnect: true });
+            .json({ nickname: user.nickname, uid: user.uid, avatar: user.avatar });
   } catch (error) {
     return res
             .status(500)
