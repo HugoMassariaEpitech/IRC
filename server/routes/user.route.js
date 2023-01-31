@@ -1,15 +1,20 @@
-const { user } = require("../middleware/export.middleware");
-const generateNameSalt = user.generateNameSalt;
+// const generateNameSalt = user.generateNameSalt;
 // const isAdmin = auth.isAdmin;
 // const validateCreateAdvertisement = validate.validateCreateAdvertisement;
 // const validateUpdateAdvertisement = validate.validateUpdateAdvertisement;
 // const validateDeleteAdvertisement = validate.validateDeleteAdvertisement;
-const userController = require("../controllers/user.controller.js");
+const userController = require("../controllers/user.controller");
 
 var router = require("express").Router();
 
 // Create a new User
-router.post("/", [generateNameSalt], userController.create);
+// La create d'user c'est dans auth
+// router.post("/", [generateNameSalt], userController.create);
+
+// Get One User
+router.get("/", userController.findOne);
+
+
 
 // // Retrieve all Advertisements
 // router.get("/", advertisementsController.findAll);
