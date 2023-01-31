@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Home from "./Pages/Home";
+import Chat from "./Pages/Chat";
 
 function App() {
   return (
     <>
-      <Home />
+      <Chat />
     </>
   );
 }

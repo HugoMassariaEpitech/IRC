@@ -20,11 +20,17 @@ server.listen(5000, () => {
 });
 
 io.on("connection", (socket) => {
-    io.emit("New User", Array.from(socket.nsp.sockets.keys()).reduce((json, value) => { json[value] = []; return json; }, {})); // New User Notification
+    io.emit("New Connexion", Array.from(socket.nsp.sockets.keys()).reduce((json, value) => { json[value] = []; return json; }, {})); // New User Notification
+    
+    
+    
+    
 
-    socket.on("Message", (message) => {
-        io.emit("Message Received", message);
-    });
+    
+    // socket.on("Message", (result) => {
+    //     io.to(result["to"]).emit("Message Received", result["message"]); // Private Message
+    //     io.to(socket.id).emit("Message Sent", result["message"]);
+    // });
 
 
 
@@ -70,14 +76,14 @@ io.on("connection", (socket) => {
 
 
 
-const mongoose = require("mongoose");
-require("dotenv").config();
+// const mongoose = require("mongoose");
+// require("dotenv").config();
 
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(()=> {
-    console.log("DB Connection Successfull");
-}).catch((err) => {
-    console.log(err.message);
-});
+// mongoose.connect(process.env.MONGO_URL, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// }).then(()=> {
+//     console.log("DB Connection Successfull");
+// }).catch((err) => {
+//     console.log(err.message);
+// });
