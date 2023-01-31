@@ -5,6 +5,7 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const messageController = require("./controllers/message.controller");
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000"
@@ -20,7 +21,13 @@ var UserConnected = {};
 io.on("connection", (socket) => {
   socket.on("Users", (data) => {
     UserConnected = { ...UserConnected, ...data };
+    console.log(data);
     io.emit("Users", UserConnected);
+  });
+  socket.on("Message", (data) => {
+    io.to(data.to).emit("Message", {from: data.from, message: data.message});
+
+    console.log(data);
   });
   socket.on("disconnect", function() {
     delete UserConnected[socket.id];
@@ -55,5 +62,5 @@ app.use(cors({
 // Import API routes
 app.use('/api/auth', routes.auth);
 app.use('/api/user', routes.user);
-app.use('/api/conversation', routes.conversation);
+// app.use('/api/conversation', routes.conversation);
 app.use('/api/message', routes.message);

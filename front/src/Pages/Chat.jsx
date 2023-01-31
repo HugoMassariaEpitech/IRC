@@ -7,12 +7,23 @@ import {socket} from "../Service/Socket";
 
 export default function Chat() {
     const [allConnexions, setConnexions] = useState({});
+    const [currentChat, setcurrentChat] = useState({});
     useEffect(() => {
         socket.on("Users", (data) => {
             delete data[socket.id];
             setConnexions(data);
         });
     }, []);
+    const handleClick = (value) => {
+        setcurrentChat(value);
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        socket.emit("Message", {to: currentChat.socketID, message: event.target.getElementsByTagName("input")[0].value, from: socket.id});
+    }
+    socket.on("Message", (data) => {
+        console.log(data);
+    });
     return (
         <div className="bg-white overflow-hidden flex-1 flex text-black">
             <div className="h-full w-16 bg-white flex flex-col border-r p-2">
@@ -28,18 +39,18 @@ export default function Chat() {
                 {
                     Object.entries(allConnexions).map((value) => {
                         return (
-                            <SingleChat avatarURL={value[1].avatarURL} nickName={value[1].nickName} lastMessage="Dernier message ..."/>
+                            <SingleChat avatar={value[1].avatarURL} nickname={value[1].nickName} handleClick={() => handleClick({socketID: value[0], avatar: value[1].avatarURL, nickname: value[1].nickName, uid: value[1].uid})}/>
                         )
                     })
                 }
             </div>
             <div className="h-full bg-white flex flex-col border-r w-2/5 p-4">
-                <div className="text-2xl font-normal">Hugo Massaria</div>
+                <div className="text-2xl font-normal">{currentChat.nickname}</div>
                 <div className="flex-auto mt-4 flex flex-col">
                     {/* <MessageIn avatarURL="https://randomuser.me/api/portraits/men/8.jpg" message="Salut Hugo !"/> */}
                     {/* <MessageOut avatarURL="https://randomuser.me/api/portraits/men/8.jpg" message="Salut Hugo !"/> */}
                 </div>
-                <form className="flex mt-4">
+                <form className="flex mt-4" onSubmit={handleSubmit}>
                     <input className="bg-gray-100 border text-sm rounded-lg block flex-auto p-2.5" placeholder="Entrez votre message ..." required />
                     <button type="submit" className="text-gray-400 font-medium rounded-lg text-sm text-center bg-gray-100 p-2.5 ml-2">Envoyer</button>
                 </form>

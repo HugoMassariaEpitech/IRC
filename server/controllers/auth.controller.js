@@ -40,7 +40,7 @@ exports.signin = async (req, res, next) => {
 
     if (!user) {
       return res
-              .status(404)
+              .status(202)
               .send({ message: "Pair name and hashtag not found" });
     }
 
@@ -51,7 +51,7 @@ exports.signin = async (req, res, next) => {
 
     if (!passwordIsValid) {
       return res
-              .status(401)
+              .status(202)
               .send({ message: "Invalid Password !" });
     }
 
