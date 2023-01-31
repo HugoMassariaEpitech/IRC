@@ -1,4 +1,4 @@
-const { addConversationToUser } = require('../middleware/export.middleware');
+const { createPrivateConversation, createGroupConversation } = require('../middleware/export.middleware');
 // const isAdmin = auth.isAdmin;
 // const validateCreateAdvertisement = validate.validateCreateAdvertisement;
 // const validateUpdateAdvertisement = validate.validateUpdateAdvertisement;
@@ -8,10 +8,10 @@ const conversationController = require("../controllers/conversation.controller.j
 var router = require("express").Router();
 
 // Create a private conversation
-router.post("/private_conversation", [conversationController.createPrivateConversation], addConversationToUser);
+router.post("/private_conversation", [createPrivateConversation], conversationController.addConversationToUser);
 
 // Create a group conversation
-router.post("/group_conversation", conversationController.createGroupConversation);
+// router.post("/group_conversation", conversationController.createGroupConversation);
 
 // // Retrieve all Advertisements
 // router.get("/", advertisementsController.findAll);

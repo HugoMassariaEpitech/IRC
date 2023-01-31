@@ -22,6 +22,8 @@ const MessageSchema = new mongoose.Schema({
     // 1. Ajouter un champ visibility dans le model Message
     // 2. Ca doit être un objet, avec une entrée pour chaque user dans cette conversation
     // 3. Chaque entrée doit contenir un booléen pour savoir si le message est visible ou non pour l'user
+
+    // Delete a message for everyone or no one, no granular visibility
     isVisible: {
       type: Boolean,
       default: true
@@ -36,13 +38,15 @@ const MessageSchema = new mongoose.Schema({
       default: "sending"
     },
     // Ref vers les messages d'une conversation
-    conversation: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "ConversaionModel"
+    conversationId: {
+        type: String
     },
     // Je crois que le createdAt est automatiquement ajouté par mongoose   
     // J'ai besoin du createdAt pour pouvoir paginate les résultats
 },
+{
+  timestamps: true
+}
 );
 
 const MessageModel = mongoose.model("Message", MessageSchema);
