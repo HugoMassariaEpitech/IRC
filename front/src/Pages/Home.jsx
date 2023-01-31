@@ -12,24 +12,24 @@
 //     const [allUsers, setUsers] = useState([]);
 //     const [allMessages, setMessages] = useState([]);
 //     var CurrentUser = "";
-//     useEffect(() => {
-//         socket.on("New User", (Users) => {
-//             delete Users[socket.id];
-//             setUsers(Users);
-//         });
-//         socket.on("Message Received", (Message) => {
-//             const ID = Math.random().toString();
-//             var OBJ = {state: "Received"};
-//             OBJ[ID] = Message;
-//             setMessages(allMessages => [...allMessages, OBJ]);
-//         });
-//         socket.on("Message Sent", (Message) => {
-//             const ID = Math.random().toString();
-//             var OBJ = {state: "Sent"};
-//             OBJ[ID] = Message;
-//             setMessages(allMessages => [...allMessages, OBJ]);
-//         });
-//     }, []);
+    // useEffect(() => {
+    //     socket.on("New User", (Users) => {
+    //         delete Users[socket.id];
+    //         setUsers(Users);
+    //     });
+    //     socket.on("Message Received", (Message) => {
+    //         const ID = Math.random().toString();
+    //         var OBJ = {state: "Received"};
+    //         OBJ[ID] = Message;
+    //         setMessages(allMessages => [...allMessages, OBJ]);
+    //     });
+    //     socket.on("Message Sent", (Message) => {
+    //         const ID = Math.random().toString();
+    //         var OBJ = {state: "Sent"};
+    //         OBJ[ID] = Message;
+    //         setMessages(allMessages => [...allMessages, OBJ]);
+    //     });
+    // }, []);
 //     const handleKeyDown = (event) => {
 //         if (event.key == "Enter") {
 //             socket.emit("Message", {to: CurrentUser, message: event.target.value});
@@ -46,13 +46,13 @@
 //                         <img className="w-10 h-10" src={Logo}></img>
 //                     </a>
 //                     <ul className="space-y-2">
-//                         {
-//                             Object.keys(allUsers).map((value, ID) => {
-//                                 return (
-//                                     <PrivateChannel name="Hugo Massaria" lastMessage="Salut !" ChangeUser={Click} ID={value}/>
-//                                 )
-//                             })
-//                         }
+                        // {
+                        //     Object.keys(allUsers).map((value, ID) => {
+                        //         return (
+                        //             <PrivateChannel name="Hugo Massaria" lastMessage="Salut !" ChangeUser={Click} ID={value}/>
+                        //         )
+                        //     })
+                        // }
 //                     </ul>
 //                 </div>
 //             </aside>
