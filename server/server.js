@@ -46,6 +46,8 @@ app.use(cookieParser());
 
 
 // Import API routes
+console.log("server")
+app.use('/api/auth', routes.auth);
 app.use('/api/user', routes.user);
 app.use('/api/conversation', routes.conversation);
 app.use('/api/message', routes.message);
