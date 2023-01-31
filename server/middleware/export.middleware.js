@@ -1,5 +1,6 @@
-const user = require("./user.middleware");
+const { generateNameSalt, createUID} = require("./auth.middleware");
 
 module.exports = {
-  user
+  generateNameSalt,
+  createUID
 }

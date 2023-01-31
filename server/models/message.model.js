@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 // On a besoin de la ref vers le model Conversation
 const MessageSchema = new mongoose.Schema({
   // L'objet messages contient tous les messages d'une conversation
-  messages: [{
+  // messages: [{
     sender: { // uid user
       type: String,
       required: true
@@ -35,10 +35,15 @@ const MessageSchema = new mongoose.Schema({
       enum: ["sending", "sent", "received", "read"],
       default: "sending"
     },
+    // Ref vers les messages d'une conversation
+    conversation: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ConversaionModel"
+    },
     // Je crois que le createdAt est automatiquement ajouté par mongoose   
     // J'ai besoin du createdAt pour pouvoir paginate les résultats
-}],
-});
+},
+);
 
 const MessageModel = mongoose.model("Message", MessageSchema);
 
