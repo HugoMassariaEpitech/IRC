@@ -1,4 +1,4 @@
-const { generateNameSalt, createUID } = require('../middleware/export.middleware');
+const { generateNameSalt, createUID, getRandomAvatar } = require('../middleware/export.middleware');
 // const isAdmin = auth.isAdmin;
 // const validateCreateAdvertisement = validate.validateCreateAdvertisement;
 // const validateUpdateAdvertisement = validate.validateUpdateAdvertisement;
@@ -8,7 +8,7 @@ const authController = require("../controllers/auth.controller.js");
 var router = require("express").Router();
 
 // Register a new User
-router.post("/register", [generateNameSalt, createUID], authController.register);
+router.post("/register", [generateNameSalt, createUID, getRandomAvatar ], authController.register);
 
 // Login an User
 router.post("/signin", authController.signin);

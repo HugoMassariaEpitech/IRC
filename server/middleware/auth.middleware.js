@@ -50,13 +50,24 @@ createUID = (req, res, next) => {
 
 // Get a random avatar picture for the user
 // randomuser.me/api/portraits/women/1.jpg
-// exports.getRandomAvatar = (req, res, next) => {
+// De 0 à 99
+const genderTranslation = {
+  "0": "men",
+  "1": "women"
+};
 
-// Get a random avatar picture for the user
-// exports.getRandomAvatar = (req, res, next) => {
+getRandomAvatar = (req, res, next) => {
+  // Get a random number between 0 and 99
+  const randomPicture = Math.floor(Math.random() * 100);
+  const randomGender = genderTranslation[Math.floor(Math.random() * 2)];
+
+  req.body.avatar = `https://randomuser.me/api/portraits/${randomGender}/${randomPicture}.jpg`;
+  next();
+};
 
 
 module.exports = {
   generateNameSalt,
-  createUID
+  createUID,
+  getRandomAvatar
 };

@@ -7,10 +7,6 @@ const UserSchema = new mongoose.Schema({
     },
     // socket_id: String, On a pas besoin de save le socket_id du fait que le socket_id est unique et qu'il est généré par le serveur à chaque connexion
 
-    name: {
-      type: String,
-      required: [true, "Please provide a name"]
-    },
     nameSalt: { // De la même manière que Discord '#00' to '#99', via validator utiliser une regex pour force ça, enfin nan increment pour chaque name identique
       type: Number,
       min: 0,
@@ -27,12 +23,13 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
       type: String,
-      required: [true, "Please provide a password"],
-      minlength: 8,
-      maxLength: 20,
-      trim: true,
-      // Required lowcase uppercase number and special character
-      match: [/^[a-zA-Z0-9.!#_-]+$/, "is invalid"]
+      required: [true, "Please provide a password"]
+      // Normal le MDP est crypté
+      // minlength: 8,
+      // maxLength: 20,
+      // trim: true,
+      // // Required lowcase uppercase number and special character
+      // match: [/^[a-zA-Z0-9.!#_-]+$/, "is invalid"]
     },
     // C'est dans le controller que je gère ça
     avatar: String, // Lien vers l'image de l'avatar

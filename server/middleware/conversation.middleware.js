@@ -1,6 +1,32 @@
+const UserModel = require("../models/user.model");
+
+const addConversationToUser = async (req, res, next) => {
+  const { conversationId, userId } = req.body;
+
+  try {
+  } catch (error) {
+    res.status(500).send(`Erreur: ${error}`);
+  }
+};
+
+const getUser = (userId) => {
+  const { userId } = req.body;
+
+  try {
+    UserModel.findOne({ _id: userId }).exec().then((result) => {
+      return result;
+    });
+  } catch (error) {
+    // Faire une erreur plus verbeuse
+    res.status(500).send(`Erreur: ${error}`);
+    next();
+  }
+};
+
+
 const conversationModel = require("../models/conversation.model.js");
 
-exports.createPrivateConversation = (req, res, next) => {
+createPrivateConversation = (req, res, next) => {
   // Use destructuring to populate the fields of the user
   // const users = req.body.users;
   // console.log(...users)
@@ -22,7 +48,7 @@ exports.createPrivateConversation = (req, res, next) => {
   });
 };
 
-exports.createGroupConversation = (req, res, next) => {
+createGroupConversation = (req, res, next) => {
   // Use destructuring to populate the fields of the user
   const conversation = { conversationName, isGroupConversation, mess } = req.body;
 
@@ -39,25 +65,7 @@ exports.createGroupConversation = (req, res, next) => {
 };
 
 
-
-
-
-// module.exports.createUser = function (data) {
-//     UserModel.create({socket_id: data.socket_id, name: data.name});
-// };
-
-// module.exports.findOneAndUpdate = function (data) {
-//     UserModel.findOneAndUpdate({socket_id: data.socket_id}, {name: data.name}).exec().then((result) => {
-//         res.send({"result": result});
-//     }).catch((error) => {
-//         res.send("Erreur");
-//     });
-// };
-
-// module.exports.findOne = function (data) {
-//     UserModel.findOne({socket_id: data.socket_id}).exec().then((result) => {
-//         res.send({"result": result});
-//     }).catch((error) => {
-//         res.send("Erreur");
-//     });
-// };
+module.exports = {
+  createPrivateConversation,
+  createGroupConversation,
+};

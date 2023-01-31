@@ -1,6 +1,9 @@
-const { generateNameSalt, createUID} = require("./auth.middleware");
+const { generateNameSalt, createUID, getRandomAvatar } = require("./auth.middleware");
+const { addConversationToUser } = require("./conversation.middleware");
 
 module.exports = {
   generateNameSalt,
-  createUID
+  createUID, 
+  getRandomAvatar,
+  addConversationToUser
 }

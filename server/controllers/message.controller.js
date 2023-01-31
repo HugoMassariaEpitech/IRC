@@ -2,10 +2,10 @@ const messageModel = require("../models/message.model.js");
 
 exports.create = async (req, res, next) => {
   // Use destructuring to populate the fields of the user
-  const Message = { messages: [{"sender" : "sender", "message": "message", "type": "text" }]};
+  const message = { sender, messsage, conversation } = req.body;
   // {nickname: nickname, identification: identification, avatar: avatar, conversation: conversation}
-  const message = new messageModel(Message)
-  await message.save().then((result) => {
+  
+  messageModel.create(message).then((result) => {
       res
         .status(201)
         .send({"result": result});
