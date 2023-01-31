@@ -1,10 +1,26 @@
 const conversationModel = require("../models/conversation.model.js");
 
-exports.create = (req, res, next) => {
+exports.createPrivateConversation = (req, res, next) => {
   // Use destructuring to populate the fields of the user
-  const User = { nickname, identification } = req.body;
+  const conversation = { conversationName, isGroupConversation } = req.body;
   // {nickname: nickname, identification: identification, avatar: avatar, conversation: conversation}
-  conversationModel.create(User).then((result) => {
+  conversationModel.create(conversation).then((result) => {
+      res
+        .status(201)
+        .send({"result": result});
+  }).catch((error) => {
+      res
+        .status(500)
+        .send(`Erreur: ${error}`);
+  });
+};
+
+exports.createGroupConversation = (req, res, next) => {
+  // Use destructuring to populate the fields of the user
+  const conversation = { conversationName, isGroupConversation, mess } = req.body;
+
+  // {nickname: nickname, identification: identification, avatar: avatar, conversation: conversation}
+  conversationModel.create(conversation).then((result) => {
       res
         .status(201)
         .send({"result": result});

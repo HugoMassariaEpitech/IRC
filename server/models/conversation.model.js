@@ -29,12 +29,11 @@ const ConversationSchema = new mongoose.Schema({
     //       default: "user"
     //   }
   }],
-  // Ref vers les messages d'une conversation
-  messages: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "MessageModel"
-  }],
   conversationName: String,
+  isGroupConversation: {
+    type: Boolean,
+    default: false
+  },
 }, {versionKey: false});
 
 const ConversationModel = mongoose.model("Conversation", ConversationSchema);

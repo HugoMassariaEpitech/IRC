@@ -7,8 +7,11 @@ const conversationController = require("../controllers/conversation.controller.j
 
 var router = require("express").Router();
 
-// Create a new User
-router.post("/", conversationController.create);
+// Create a private conversation
+router.post("/private_conversation", conversationController.createPrivateConversation);
+
+// Create a group conversation
+router.post("/group_conversation", conversationController.createGroupConversation);
 
 // // Retrieve all Advertisements
 // router.get("/", advertisementsController.findAll);
