@@ -1,76 +1,79 @@
-// Il faudrait une config eslint pour forcer les bonnes pratiques
-// Trier dans l'ordre alphabétique les imports
+// Socket IO
 
 const express = require("express");
+const app = express();
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000"
+  }
+});
+
+server.listen(5000, () => {
+  console.log("Listen to port 5000");
+});
+
+io.on("connection", (socket) => {
+  socket.on("New Connexion", (message) => {
+    socket.data.isConnected = true;
+    io.emit("New Connexion", socket);
+    // io.emit("New Connexion", Array.from(socket.nsp.sockets.keys()).reduce((json, value) => { json[value] = []; return json; }, {})); // New User Notification
+  });
+
+  // socket.on("Message", (message) => {
+  //     io.emit("Message Received", message);
+  // });
+
+  // socket.on("New Connexion", (message) => {
+  //   console.log(message);
+  // });
+
+  // socket.on("Get All Users", () => {
+  //     socket.emit("All Users", Array.from(socket.nsp.sockets.keys()));
+  // });
+  // UserController.createUser({socket_id: socket.id, name: "Hugo"});
+
+
+  // socket.on('chat message', (id) => {
+  //     io.to(id).emit('chat message', "hello toi"); // Private Message
+  // });
+  // socket.on('JoinRoom', (id) => {
+
+
+
+  //     socket.join(id);
+  //     io.in("MiniRoom").emit('chat message', "Hugo joined room");
+  // });
+});
+
+// Mangoose & Routers
+
 const connectDB = require("./config/Database");
-const cookieParser = require("cookie-parser");
 const routes = require("./routes/export.route");
 const cors = require("cors");
 const logger = require("morgan");
 const fs = require("fs");
-const socketIO = require("./socket.io");
-
-
-
-// Variables
-const PORT = process.env.PORT || 5000;
 
 // Connect to the database
 connectDB();
-
-// Create the Express app
-const app = express();
 
 // Middleware
 // To parse the body of the request
 app.use(express.json());
 
-// Log
-// To store the logs in a file
-// app.use(logger("dev"), {
-//   stream: fs.createWriteStream("./access.log", { flags: "a" })
-// });
 // To display the logs in the console
 app.use(logger("dev"));
 
 // CORS
 // Allow the front to communicate with the Back
-var corsOptions = {
+app.use(cors({
   origin: "http://localhost:3000"
-};
-app.use(cors(corsOptions));
-
-// Cookies
-app.use(cookieParser());
-
-
+}));
 
 // Import API routes
-console.log("server")
 app.use('/api/auth', routes.auth);
 app.use('/api/user', routes.user);
 app.use('/api/conversation', routes.conversation);
 app.use('/api/message', routes.message);
-
-
-// Swagger
-// swaggerDocs(app, PORT)
-
-// Start the server
-app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))
-
-// const mongoose = require("mongoose");
-// require("dotenv").config();
-
-// mongoose.connect(process.env.MONGO_URL, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// }).then(()=> {
-//     console.log("DB Connection Successfull");
-// }).catch((err) => {
-//     console.log(err.message);
-// });
-// J'sais pas si je dois pass app comme arg sachant que je l'importe dans socket.io.js
-// socketIO(app);
-
-module.exports = app;

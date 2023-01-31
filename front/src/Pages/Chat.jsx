@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "../index.css";
-import socketIOClient from "socket.io-client";
 import SingleChat from "../Components/SingleChat";
 import MessageIn from "../Components/MessageIn";
 import MessageOut from "../Components/MessageOut";
-
-const socket = socketIOClient("http://localhost:5000");
+import {socket} from "../Service/Socket";
 
 export default function Chat() {
     const [allConnexions, setConnexions] = useState([]);
     useEffect(() => {
         socket.on("New Connexion", (Users) => {
-            delete Users[socket.id];
-            setConnexions(Users);
+            console.log(Users);
         });
     }, []);
     return (
