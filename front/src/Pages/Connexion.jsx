@@ -17,15 +17,15 @@ export default function Connexion(props) {
                 <form onSubmit={props.handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-400">Identifiant</label>
-                        <input type="text" className="bg-gray-100 border text-sm rounded-lg block w-1/3 p-2.5" placeholder="name@flowbite.com" />
+                        <input type="text" className="bg-gray-100 border text-sm rounded-lg block w-1/3 p-2.5" placeholder="Nom d'utilisateur" />
                     </div>
                     <div className="mb-10">
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-400">Mot de passe</label>
                         <input type="password" className="bg-gray-100 border text-sm rounded-lg block w-1/3 p-2.5" placeholder="••••••••••••••••" />
                     </div>
                     <div className="flex">
-                        <button type="submit" className="text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-[#0695FF]">Connexion</button>
-                        <button className="text-[#0695FF] font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-white">Créer un compte</button>
+                        <button type="submit" className="text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-[#0695FF]">{props.submitButton}</button>
+                        <button type="button" className="text-[#0695FF] font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-white" onClick={props.handleAlternative}>{props.alternativeButton}</button>
                     </div>
                 </form>
             </div>

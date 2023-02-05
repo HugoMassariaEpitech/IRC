@@ -1,20 +1,15 @@
 const mongoose = require("mongoose");
-require("dotenv").config();
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URL, {
-      useNewUrlParser: true,
-      // Check les options que je peux mettre ici
+    await mongoose.set("strictQuery", false);
+    await mongoose.connect("mongodb+srv://MiniChat:Azerty12345@minichat.7nhw5wm.mongodb.net/MiniChat", {
+      useNewUrlParser: true
     });
-
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log("Database connected.");
   } catch (error) {
-    console.log(`Error: ${error.message}`);
-    process.exit();
+    console.log("Failed to connect database.");
   }
 };
 
 module.exports = connectDB;
-
-

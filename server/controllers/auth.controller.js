@@ -1,84 +1,48 @@
 const UserModel = require("../models/user.model");
 const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
 
-exports.register = async (req, res, next) => {
-  console.log(req.body.nickname)
-
-  // const newUser = {
-  //   firstName: req.body.firstName,
-  //   lastName: req.body.lastName,
-  //   email: req.body.email,
-  //   password: bcrypt.hashSync(req.body.password, 8),
-  //   phone: req.body.phone
-  // };
-
-  // Utilisation de destructuring pour récupérer les champs du user
-  const newUser = { nickname, nameSalt, uid, avatar } = req.body;
-  newUser.password = bcrypt.hashSync(req.body.password, 8);
-
-  UserModel.create(newUser)
-    .then(data => {
-      res
-        .status(201)
-        .send({message: `New User Registered.`});
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .send({
-          message:
-            err.message || "Some error occured while creating the User."
-      });    
-    });
+exports.register = async (req, res) => {
+  const User = { nickname: req.body.nickname, password: req.body.password != undefined ? bcrypt.hashSync(req.body.password, 8) : undefined, avatar: req.avatar };
+  UserModel.create(User).then((data) => {
+    res.status(200).send({ type: "registered", status: "success", message: { uid: data.id, avatar: data.avatar, nickname: data.nickname } });
+  }).catch((error) => {
+    res.status(200).send({ type: "registered", status: "failed", message: error.code === 11000 ? "Nickname already used." : Object.assign({}, ...Object.entries(error.errors).map((value) => ({ [value[0]]: value[1].message }))) });
+  });
 };
 
-// Renvoyer nickname et avatar
 exports.signin = async (req, res, next) => {
-
-  try {
-    const user = await UserModel.findOne({ uid: req.body.uid });
-
-    if (!user) {
-      return res
-              .status(202)
-              .send({ message: "Pair name and hashtag not found" });
+  UserModel.findOne({ nickname: req.body.nickname }).then((data) => {
+    if (data != null) {
+      const passwordIsValid = req.body.password != undefined ? bcrypt.compareSync(req.body.password, data.password) : false;
+      if (passwordIsValid) {
+        req.data = { type: "signin", status: "success", message: { uid: data.id, avatar: data.avatar, nickname: data.nickname } };
+        next();
+      } else {
+        res.status(200).send({ type: "signin", status: "failed", message: "Invalid password." });
+      }
+    } else {
+      res.status(200).send({ type: "signin", status: "failed", message: "No user found." });
     }
+  })
+};
 
-    const passwordIsValid = bcrypt.compareSync(
-      req.body.password,
-      user.password
-    );
-
-    if (!passwordIsValid) {
-      return res
-              .status(202)
-              .send({ message: "Invalid Password !" });
+exports.getNicknameAvatar = async (req, res) => {
+  UserModel.aggregate([{
+    $match: {
+      _id: { $in: Object.keys(req.data.message.lastMessages).map((value) => mongoose.Types.ObjectId(value)) }
     }
-
-    // On fait sans le JWT pour le moment
-    // const token = jwt.sign({ id: user.id }, config.secret, {
-    //   expiresIn: 360000, // 100 hour for debug purpose
-    // });
-
-    // const todayAsDay = new Date.now();
-    // const todayAsNumber = todayAsDay.getTime() / 3600;
-
-    // console.log(todayAsDay);
-    // console.log(Math.round((todayAsDay.getTime())));
-
-    // For a weird reason I have to put 3hours as maxAge to get the cookie to expire in 1 hour
-    return res
-            .status(200)
-            // .cookie("access_token", token, { 
-            //   // maxAge: (2 * 60 * 60 * 1000) + 3600000,
-            //   maxAge: 3 * 3600000,
-            //   httpOnly: true,
-            //   secure: process.env.NODE_ENV === "production"
-            // })
-            .json({ nickname: user.nickname, uid: user.uid, avatar: user.avatar, conversations: user.conversations });
-  } catch (error) {
-    return res
-            .status(500)
-            .send({ message: error.message });
-  }
+  }, {
+    $project: {
+      _id: 0,
+      id: {
+        $toString: "$_id"
+      },
+      nickname: "$nickname",
+      avatar: "$avatar"
+    }
+  }]).then((data) => {
+    data.map((item) => Object.assign(req.data.message.lastMessages[item.id], {nickname: item.nickname, avatar: item.avatar}));
+    res.status(200).send(req.data);
+  })
 };

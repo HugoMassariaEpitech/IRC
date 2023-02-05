@@ -1,98 +1,125 @@
-const messageModel = require("../models/message.model.js");
+const mongoose = require("mongoose");
+const UserModel = require("../models/user.model");
 
 exports.create = async (req, res) => {
-  // Use destructuring to populate the fields of the user
-  const message = { sender, messsage, conversationId } = req.body;
-  // {nickname: nickname, identification: identification, avatar: avatar, conversation: conversation}
-  
-  messageModel.create(message).then((result) => {
-    res
-      .status(201)
-      .send({"result": result});
-  }).catch((error) => {
-    res
-      .status(500)
-      .send(`Erreur: ${error}`);
+  await UserModel.updateMany({ "_id": { $in: [mongoose.Types.ObjectId(req.body.from), mongoose.Types.ObjectId(req.body.to)] } }, [{
+    $set: {
+      messages: {
+        $mergeObjects: [
+          "$messages",
+          {
+            $cond: {
+              if: {
+                $eq: [{ $toString: "$_id" }, req.body.from]
+              },
+              then: {
+                $arrayToObject: [
+                  [{
+                    "k": req.body.to, "v": {
+                      $cond: {
+                        if: {
+                          $isArray: `$messages.${req.body.to}`
+                        },
+                        then: {
+                          $concatArrays: [
+                            `$messages.${req.body.to}`,
+                            [{ type: "sent", message: req.body.message }]
+                          ]
+                        },
+                        else: {
+                          $concatArrays: [
+                            [{ type: "sent", message: req.body.message }]
+                          ]
+                        }
+                      }
+                    }
+                  }]
+                ]
+              },
+              else: {
+                $arrayToObject: [
+                  [{
+                    "k": req.body.from, "v": {
+                      $cond: {
+                        if: {
+                          $isArray: `$messages.${req.body.from}`
+                        },
+                        then: {
+                          $concatArrays: [
+                            `$messages.${req.body.from}`,
+                            [{ type: "recieved", message: req.body.message }]
+                          ]
+                        },
+                        else: {
+                          $concatArrays: [
+                            [{ type: "recieved", message: req.body.message }]
+                          ]
+                        }
+                      }
+                    }
+                  }]
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }]).then((data) => {
+    res.status(200).send({ type: "message", status: "updated" });
   });
 };
 
-exports.findAll = async (req, res) => {
-  const conversationId = req.query.conversationId;
-  messageModel.find({ conversationId })
-    .then((result) => {
-      // [{ sender, message, type, createdAt } ] = result
-      // Ne renvoyer que le sender message type createdAt
-      res
-        .status(200)
-        .send({ ...result });
-    })
-    .catch((error) => {
-      res
-        .status(500)
-        .send(`Erreur: ${error}`);
-    });
+exports.getLast = async (req, res, next) => {
+  UserModel.aggregate([{
+    $match: {
+      _id: { $in: [mongoose.Types.ObjectId(req.data.message.uid)] }
+    }
+  }, {
+    $project: {
+      _id: 0,
+      messages: {
+        $reduce: {
+          input: { $objectToArray: "$messages" },
+          initialValue: {},
+          in: {
+            $mergeObjects: [
+              "$$value",
+              {
+                $arrayToObject: [
+                  [{
+                    "k": "$$this.k", "v": {
+                      $last: "$$this.v"
+                    }
+                  }]
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  }]).then((data) => {
+    if (data[0].messages == null) {
+      res.status(200).send(req.data);
+    } else {
+      req.data.message["lastMessages"] = data[0].messages;
+      next();
+    }
+  })
 };
 
-exports.findPaginated = async (req, res) => {
-  const { conversationId  } = req.query;
-
-  // console.log("conversationId", conversationId, "\ncreatedAtBefore", createdAtBefore);
-
-  // messageModel.find({conversationId: conversationId, createdAt: { $lte: createdAtBefore } })
-  //   .limit( 10 )
-  //   .then((result) => {
-  //     res
-  //       .status(200)
-  //       .send({ ...result });
-  //   })
-  //   .catch((error) => {
-  //     res
-  //       .status(500)
-  //       .send(`Erreur: ${error}`);
-  //   });
-
-  // Trouver quel a été le dernier message récupéré, pour savoir à partir de combien skip
-  messageModel.find({conversationId})
-    .select('sender message type createdAt')
-    .limit(10)
-    .skip(1)  
-    .then((result) => {
-      res
-        .status(200)
-        .send({ ...result });
-    })
-    .catch((error) => {
-      res
-        .status(500)
-        .send(`Erreur: ${error}`);
-    });
-
+exports.getAll = async (req, res) => {
+  UserModel.aggregate([{
+    $match: {
+      _id: { $in: [mongoose.Types.ObjectId(req.body.from)] }
+    }
+  }, {
+    $project: {
+      _id: 0,
+      messages: `$messages.${req.body.to}`
+    }
+  }]).then((data) => {
+    res.status(200).send({ type: "messages", status: "success", messages: data[0].messages });
+  })
 };
-
-  // MyModel.find( { createdOn: { $lte: request.createdOnBefore } } )
-  //   .limit( 10 )
-  //   .sort( '-createdOn' )
-
-
-
-
-
-// module.exports.createUser = function (data) {
-//     UserModel.create({socket_id: data.socket_id, name: data.name});
-// };
-
-// module.exports.findOneAndUpdate = function (data) {
-//     UserModel.findOneAndUpdate({socket_id: data.socket_id}, {name: data.name}).exec().then((result) => {
-//         res.send({"result": result});
-//     }).catch((error) => {
-//         res.send("Erreur");
-//     });
-// };
-
-// module.exports.findOne = function (data) {
-//     UserModel.findOne({socket_id: data.socket_id}).exec().then((result) => {
-//         res.send({"result": result});
-//     }).catch((error) => {
-//         res.send("Erreur");
-//     });
-// };
