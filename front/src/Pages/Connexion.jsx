@@ -26,6 +26,7 @@ export default function Connexion(props) {
                     <div className="flex">
                         <button type="submit" className="text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-[#0695FF]">{props.submitButton}</button>
                         <button type="button" className="text-[#0695FF] font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-white" onClick={props.handleAlternative}>{props.alternativeButton}</button>
+                        <button type="button" className="text-[#0695FF] font-medium rounded-lg text-sm py-2.5 text-center bg-white" onClick={props.anonymous}>Anonyme</button>
                     </div>
                 </form>
             </div>

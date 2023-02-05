@@ -5,13 +5,13 @@ const ChannelSchema = new mongoose.Schema({
         type: String,
         required: [true, "No name provided."]
     },
-    author: {
-        type: String,
-        required: [true, "No author provided."]
-    },
     avatar: String,
     messages: {
         type: [Map]
+    },
+    users: {
+        type: Map,
+        of: Map
     }
 }, { versionKey: false });
 

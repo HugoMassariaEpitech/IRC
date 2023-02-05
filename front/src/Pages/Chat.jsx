@@ -58,7 +58,9 @@ export default function Chat(props) {
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        socket.emit("Message", { from: { nickname: User.nickname, uid: User.uid, socket: socket.id }, to: { nickname: Current.nickname, uid: Conversations[Current.nickname].uid, socket: Current.socket }, message: event.target.getElementsByTagName("input")[0].value });
+        if (Current != {}) {
+            socket.emit("Message", { from: { nickname: User.nickname, uid: User.uid, socket: socket.id }, to: { nickname: Current.nickname, uid: Conversations[Current.nickname].uid, socket: Current.socket }, message: event.target.getElementsByTagName("input")[0].value });
+        }
     }
     return (
         <div className="bg-white overflow-hidden flex-1 flex text-black">

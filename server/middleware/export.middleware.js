@@ -1,9 +1,10 @@
 const { getRandomAvatar } = require("./auth.middleware");
 const { checkUsersExists, getLastMessages } = require("./message.middleware");
-const { setLastMessage } = require("./channel.middleware");
+const { setLastMessage, getAllUsers } = require("./channel.middleware");
 
 module.exports = {
   getRandomAvatar,
   checkUsersExists,
-  setLastMessage
+  setLastMessage,
+  getAllUsers
 }
